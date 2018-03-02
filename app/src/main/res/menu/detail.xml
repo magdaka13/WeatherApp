@@ -30,4 +30,11 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_mylocation"
+        android:orderInCategory="101"
+        android:title="@string/action_mylocation"
+        app:showAsAction="never" />
+
 </menu>

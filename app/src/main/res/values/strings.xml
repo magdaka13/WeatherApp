@@ -74,10 +74,10 @@
       - - - - - - - - - - - - - - -->
 
     <!-- For labelling today's forecast -->
-    <string name="today">Today</string>
+    <string name="today">Tomorrow</string>
 
     <!-- For labelling tomorrow's forecast -->
-    <string name="tomorrow">Tomorrow</string>
+    <string name="tomorrow">Day after Tomorrow</string>
 
     <!-- Date format -->
     <string name="format_full_friendly_date">
@@ -208,5 +208,6 @@
     </string>
     <string name="metar_label">METAR</string>
     <string name="taf_label">TAF</string>
+    <string name="action_mylocation">Get current location</string>
 
 </resources>
