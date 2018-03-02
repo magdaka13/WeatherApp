@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.weatherForecastMG">
 
-    <!-- This permission is necessary in order for Sunshine to perform network access. -->
+    <!-- This permission is necessary in order for WeatherForecast to perform network access. -->
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application

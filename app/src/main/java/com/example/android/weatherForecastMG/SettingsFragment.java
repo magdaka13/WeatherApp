@@ -14,7 +14,7 @@ import com.example.android.weatherForecastMG.data.WeatherContract;
 import com.example.android.weatherForecastMG.sync.WeatherForecastSyncUtils;
 
 /**
- * The SettingsFragment serves as the display for all of the user's settings. In Sunshine, the
+ * The SettingsFragment serves as the display for all of the user's settings. In WeatherForecast, the
  * user will be able to change their preference for units of measurement from metric to imperial,
  * set their preferred weather location, and indicate whether or not they'd like to see
  * notifications.

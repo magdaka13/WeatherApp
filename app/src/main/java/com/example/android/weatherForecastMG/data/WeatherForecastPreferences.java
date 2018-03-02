@@ -142,7 +142,7 @@ public final class WeatherForecastPreferences {
     }
 
     /**
-     * Returns true if the user prefers to see notifications from Sunshine, false otherwise. This
+     * Returns true if the user prefers to see notifications from WeatherForecast, false otherwise. This
      * preference can be changed by the user within the SettingsFragment.
      *
      * @param context Used to access SharedPreferences
@@ -153,7 +153,7 @@ public final class WeatherForecastPreferences {
         String displayNotificationsKey = context.getString(R.string.pref_enable_notifications_key);
 
         /*
-         * In Sunshine, the user has the ability to say whether she would like notifications
+         * In WeatherForecast, the user has the ability to say whether she would like notifications
          * enabled or not. If no preference has been chosen, we want to be able to determine
          * whether or not to show them. To do this, we reference a bool stored in bools.xml.
          */
@@ -178,7 +178,7 @@ public final class WeatherForecastPreferences {
      * @return UNIX time of when the last notification was shown
      */
     public static long getLastNotificationTimeInMillis(Context context) {
-        /* Key for accessing the time at which Sunshine last displayed a notification */
+        /* Key for accessing the time at which WeatherForecast last displayed a notification */
         String lastNotificationKey = context.getString(R.string.pref_last_notification);
 
         /* As usual, we use the default SharedPreferences to access the user's preferences */

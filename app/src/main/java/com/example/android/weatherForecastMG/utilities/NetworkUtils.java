@@ -22,7 +22,7 @@ public final class NetworkUtils {
     private static final String TAG = NetworkUtils.class.getSimpleName();
 
     /*
-     * Sunshine was originally built to use OpenWeatherMap's API. However, we wanted to provide
+     * WeatherForecast was originally built to use OpenWeatherMap's API. However, we wanted to provide
      * a way to much more easily test the app and provide more varied weather data. After all, in
      * Mountain View (Google's HQ), it gets very boring looking at a forecast of perfectly clear
      * skies at 75°F every day... (UGH!) The solution we came up with was to host our own fake
@@ -37,8 +37,9 @@ public final class NetworkUtils {
     private static final String DYNAMIC_WEATHER_URL =
             "http://api.openweathermap.org/data/2.5/forecast?APPID=9ce6b38410e63ef3deae35742ce27029";
 
-    private static final String STATIC_WEATHER_URL =
-            "https://andfun-weather.udacity.com/staticweather";
+    private static final String METAR_TAF_URL =  "https://api.checkwx.com";
+
+    private static final String METAR_TAF_KEY="a6605a9620aaac5f49f59559a6";
 
     private static final String FORECAST_BASE_URL = DYNAMIC_WEATHER_URL;
 
@@ -75,7 +76,7 @@ public final class NetworkUtils {
      * <p>
      * 1) You should be able to just use one method when you need to create the URL within the
      * app instead of calling both methods.
-     * 2) Later in Sunshine, you are going to add an alternate method of allowing the user
+     * 2) Later in WeatherForecast, you are going to add an alternate method of allowing the user
      * to select their preferred location. Once you do so, there will be another way to form
      * the URL using a latitude and longitude rather than just a location String. This method
      * will "decide" which URL to build and return it.

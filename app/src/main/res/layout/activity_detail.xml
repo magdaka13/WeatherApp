@@ -21,7 +21,7 @@
             android:id="@+id/primary_info"
             layout="@layout/primary_weather_info"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="8dp"
             android:layout_weight="1" />
 
         <include

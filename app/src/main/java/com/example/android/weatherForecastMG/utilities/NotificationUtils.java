@@ -112,7 +112,7 @@ public class NotificationUtils {
 
             /*
              * This Intent will be triggered when the user clicks the notification. In our case,
-             * we want to open Sunshine to the DetailActivity to display the newly updated weather.
+             * we want to open WeatherForecast to the DetailActivity to display the newly updated weather.
              */
             Intent detailIntentForToday = new Intent(context, DetailActivity.class);
             detailIntentForToday.setData(todaysWeatherUri);

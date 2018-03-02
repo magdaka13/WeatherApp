@@ -216,7 +216,7 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
     /**
      * Returns an integer code related to the type of View we want the ViewHolder to be at a given
      * position. This method is useful when we want to use different layouts for different items
-     * depending on their position. In Sunshine, we take advantage of this method to provide a
+     * depending on their position. In WeatherForecast, we take advantage of this method to provide a
      * different layout for the "today" layout. The "today" layout is only shown in portrait mode
      * with the first item in the list.
      *

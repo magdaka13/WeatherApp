@@ -29,10 +29,10 @@ public class WeatherForecastSyncUtils {
 
     private static boolean sInitialized;
 
-    private static final String SUNSHINE_SYNC_TAG = "sunshine-sync";
+    private static final String WeatherForecast_SYNC_TAG = "WeatherForecast-sync";
 
     /**
-     * Schedules a repeating sync of Sunshine's weather data using FirebaseJobDispatcher.
+     * Schedules a repeating sync of WeatherForecast's weather data using FirebaseJobDispatcher.
      * @param context Context used to create the GooglePlayDriver that powers the
      *                FirebaseJobDispatcher
      */
@@ -41,12 +41,12 @@ public class WeatherForecastSyncUtils {
         Driver driver = new GooglePlayDriver(context);
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
 
-        /* Create the Job to periodically sync Sunshine */
-        Job syncSunshineJob = dispatcher.newJobBuilder()
-                /* The Service that will be used to sync Sunshine's data */
+        /* Create the Job to periodically sync WeatherForecast */
+        Job syncWeatherForecastJob = dispatcher.newJobBuilder()
+                /* The Service that will be used to sync WeatherForecast's data */
                 .setService(WeatherForecastFirebaseJobService.class)
                 /* Set the UNIQUE tag used to identify this Job */
-                .setTag(SUNSHINE_SYNC_TAG)
+                .setTag(WeatherForecast_SYNC_TAG)
                 /*
                  * Network constraints on which this Job should run. We choose to run on any
                  * network, but you can also choose to run only on un-metered networks or when the
@@ -60,7 +60,7 @@ public class WeatherForecastSyncUtils {
                  */
                 .setLifetime(Lifetime.FOREVER)
                 /*
-                 * We want Sunshine's weather data to stay up to date, so we tell this Job to recur.
+                 * We want WeatherForecast's weather data to stay up to date, so we tell this Job to recur.
                  */
                 .setRecurring(true)
                 /*
@@ -82,7 +82,7 @@ public class WeatherForecastSyncUtils {
                 .build();
 
         /* Schedule the Job with the dispatcher */
-        dispatcher.schedule(syncSunshineJob);
+        dispatcher.schedule(syncWeatherForecastJob);
     }
     /**
      * Creates periodic sync tasks and checks to see if an immediate sync is required. If an
@@ -102,7 +102,7 @@ public class WeatherForecastSyncUtils {
         sInitialized = true;
 
         /*
-         * This method call triggers Sunshine to create its task to synchronize weather data
+         * This method call triggers WeatherForecast to create its task to synchronize weather data
          * periodically.
          */
         scheduleFirebaseJobDispatcherSync(context);

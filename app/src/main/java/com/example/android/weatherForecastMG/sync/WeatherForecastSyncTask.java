@@ -48,16 +48,16 @@ public class WeatherForecastSyncTask {
              */
             if (weatherValues != null && weatherValues.length != 0) {
                 /* Get a handle on the ContentResolver to delete and insert data */
-                ContentResolver sunshineContentResolver = context.getContentResolver();
+                ContentResolver WeatherForecastContentResolver = context.getContentResolver();
 
                 /* Delete old weather data because we don't need to keep multiple days' data */
-                sunshineContentResolver.delete(
+                WeatherForecastContentResolver.delete(
                         WeatherContract.WeatherEntry.CONTENT_URI,
                         null,
                         null);
 
-                /* Insert our new weather data into Sunshine's ContentProvider */
-                sunshineContentResolver.bulkInsert(
+                /* Insert our new weather data into WeatherForecast's ContentProvider */
+                WeatherForecastContentResolver.bulkInsert(
                         WeatherContract.WeatherEntry.CONTENT_URI,
                         weatherValues);
 
