@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import com.example.android.weatherForecastMG.data.WeatherForecastPreferences;
 import com.example.android.weatherForecastMG.data.WeatherContract;
@@ -13,7 +14,19 @@ import com.example.android.weatherForecastMG.utilities.OpenWeatherJsonUtils;
 
 import java.net.URL;
 
+import static android.content.ContentValues.TAG;
+
+
 public class WeatherForecastSyncTask {
+
+    public static final String[] WEATHER_METAR_PROJECTION = {
+            WeatherContract.WeatherEntry.COLUMN_METAR_RAW,
+            WeatherContract.WeatherEntry.COLUMN_DEWPOINT_C,
+            WeatherContract.WeatherEntry.COLUMN_DEWPOINT_F,
+            WeatherContract.WeatherEntry.COLUMN_FLIGHT_CATEGORY,
+            WeatherContract.WeatherEntry.COLUMN_VISIBILITY_MILES,
+            WeatherContract.WeatherEntry.COLUMN_VISIBILITY_METERS
+    };
 
     /**
      * Performs the network request for updated weather, parses the JSON from that request, and
@@ -90,6 +103,34 @@ public class WeatherForecastSyncTask {
                 }
 
             /* If the code reaches this point, we have successfully performed our sync */
+
+            /*METAR data */
+                URL METARRequestUrl = NetworkUtils.getMETARUrl(context);
+            /* Use the URL to retrieve the JSON */
+                String jsonWeatherResponseMETAR = NetworkUtils.getResponseFromHttpUrlWithHeader(METARRequestUrl);
+                Log.v(TAG, "METAR JSON " + jsonWeatherResponseMETAR);
+
+            /* Parse the JSON into a list of weather values */
+                ContentValues[] weatherValuesMETAR = OpenWeatherJsonUtils
+                        .getWeatherContentValuesFromJsonMETAR(context, jsonWeatherResponseMETAR);
+
+                if (weatherValuesMETAR != null && weatherValues.length != 0) {
+                /* Get a handle on the ContentResolver to delete and insert data */
+                    ContentResolver WeatherMETARContentResolver = context.getContentResolver();
+
+
+                /* update WeatherForecast's ContentProvider */
+//                    WeatherMETARContentResolver.updateMETARdata(
+  //                          WeatherContract.WeatherEntry.CONTENT_URI,
+    //                        weatherValuesMETAR,
+      //                      WeatherContract.WeatherEntry.COLUMN_WEATHER_ID,
+        ///                    WEATHER_METAR_PROJECTION
+
+           //                 );
+                }
+            /*METAR data-end */
+
+
 
             }
 

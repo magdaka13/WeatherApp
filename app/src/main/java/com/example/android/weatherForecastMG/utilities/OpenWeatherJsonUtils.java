@@ -14,6 +14,8 @@ import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * Utility functions to handle OpenWeatherMap JSON data.
  */
@@ -47,6 +49,9 @@ public final class OpenWeatherJsonUtils {
     private static final String OWM_WEATHER_ID = "id";
 
     private static final String OWM_MESSAGE_CODE = "cod";
+
+
+    private static final String METAR_CLOUDS="clouds";
 
     /**
      * This method parses JSON from a web response and returns an array of Strings
@@ -140,7 +145,6 @@ public final class OpenWeatherJsonUtils {
             JSONObject weatherObject = dayForecast.getJSONArray(OWM_WEATHER).getJSONObject(0);
 
             weatherId = weatherObject.getInt(OWM_WEATHER_ID);
-            Log.e("AA","WEather id="+weatherId);
 
             /*
              * Temperatures are sent by Open Weather Map in a child object called "temp".
@@ -166,6 +170,73 @@ public final class OpenWeatherJsonUtils {
 
             weatherContentValues[i] = weatherValues;
         }
+
+        return weatherContentValues;
+    }
+
+    /*
+    Parses JSON from METAR weather data
+     */
+    public static ContentValues[] getWeatherContentValuesFromJsonMETAR(Context context, String forecastJsonStr)
+            throws JSONException {
+
+        JSONObject forecastJson = new JSONObject(forecastJsonStr);
+
+        /* Is there an error? */
+        if (forecastJson.has(OWM_MESSAGE_CODE)) {
+            int errorCode = forecastJson.getInt(OWM_MESSAGE_CODE);
+
+            switch (errorCode) {
+                case HttpURLConnection.HTTP_OK:
+                    break;
+                case HttpURLConnection.HTTP_NOT_FOUND:
+                    /* Location invalid */
+                    return null;
+                default:
+                    /* Server probably down */
+                    return null;
+            }
+        }
+
+        JSONArray jsonWeatherArrayData = forecastJson.getJSONArray("data");
+JSONObject data= jsonWeatherArrayData.getJSONObject(0);
+String metar_raw=data.getString("raw_text");
+
+        Log.v(TAG, "METAR raw: "+metar_raw);
+
+        JSONArray clouds=data.getJSONArray("clouds");
+
+for (int i=0; i< clouds.length();i++) {
+    String clouds_code = clouds.getJSONObject(i).getString("code");
+    String clouds_text = clouds.getJSONObject(i).getString("text");
+    String clouds_feet_agl = clouds.getJSONObject(i).getString("base_feet_agl");
+    String clouds_meters_agl = clouds.getJSONObject(i).getString("base_meters_agl");
+
+    Log.v(TAG, "Clouds text(code): "+clouds_text+"("+clouds_code+")");
+    Log.v(TAG, "Clouds above ground level feet(meters): "+clouds_feet_agl+"("+clouds_meters_agl+")");
+
+}
+
+        JSONObject conditions=data.getJSONObject("conditions");
+        String conditions_code=conditions.getString("code");
+        String conditions_text=conditions.getString("text");
+
+        JSONObject dew_point=data.getJSONObject("dewpoint");
+        String dew_point_C=dew_point.getString("celsius");
+        String dew_point_F=dew_point.getString("fahrenheit");
+
+        String flight_category=data.getString("flight_category");
+        JSONObject visibility=data.getJSONObject("visibility");
+        String visibility_miles=visibility.getString("miles");
+        String visibility_meters=visibility.getString("meters");
+
+        Log.v(TAG, "Conditions code(text): "+conditions_code+"("+conditions_text+")");
+        Log.v(TAG, "Dew point C(F): "+dew_point_C+"("+dew_point_F+")");
+        Log.v(TAG, "Flight category: "+flight_category);
+        Log.v(TAG, "Visibility miles(metres): "+visibility_miles+"("+visibility_meters+")");
+
+        ContentValues[] weatherContentValues = new ContentValues[jsonWeatherArrayData.length()];
+
 
         return weatherContentValues;
     }

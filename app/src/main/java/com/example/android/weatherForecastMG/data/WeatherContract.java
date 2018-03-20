@@ -95,6 +95,14 @@ public class WeatherContract {
          */
         public static final String COLUMN_DEGREES = "degrees";
 
+        /* METAR data */
+        public static final String COLUMN_METAR_RAW = "metar_raw";
+        public static final String COLUMN_DEWPOINT_C = "dewpoint_c";
+        public static final String COLUMN_DEWPOINT_F = "dewpoint_f";
+        public static final String COLUMN_FLIGHT_CATEGORY = "flight_category";
+        public static final String COLUMN_VISIBILITY_MILES = "visibility_miles";
+        public static final String COLUMN_VISIBILITY_METERS = "visibility_meters";
+
         /**
          * Builds a URI that adds the weather date to the end of the forecast content URI path.
          * This is used to query details about a single weather entry by date. This is what we

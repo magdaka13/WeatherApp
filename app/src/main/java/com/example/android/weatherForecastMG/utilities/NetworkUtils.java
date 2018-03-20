@@ -21,23 +21,12 @@ public final class NetworkUtils {
 
     private static final String TAG = NetworkUtils.class.getSimpleName();
 
-    /*
-     * WeatherForecast was originally built to use OpenWeatherMap's API. However, we wanted to provide
-     * a way to much more easily test the app and provide more varied weather data. After all, in
-     * Mountain View (Google's HQ), it gets very boring looking at a forecast of perfectly clear
-     * skies at 75°F every day... (UGH!) The solution we came up with was to host our own fake
-     * weather server. With this server, there are two URL's you can use. The first (and default)
-     * URL will return dynamic weather data. Each time the app refreshes, you will get different,
-     * completely random weather data. This is incredibly useful for testing the robustness of your
-     * application, as different weather JSON will provide edge cases for some of your methods.
-     *
-     * If you'd prefer to test with the weather data that you will see in the videos on Udacity,
-     * you can do so by setting the FORECAST_BASE_URL to STATIC_WEATHER_URL below.
-     */
     private static final String DYNAMIC_WEATHER_URL =
             "http://api.openweathermap.org/data/2.5/forecast?APPID=9ce6b38410e63ef3deae35742ce27029";
 
-    private static final String METAR_TAF_URL =  "https://api.checkwx.com";
+    private static final String METAR_URL =  "https://api.checkwx.com/metar";
+    private static final String TAF_URL =  "https://api.checkwx.com/taf";
+
 
     private static final String METAR_TAF_KEY="a6605a9620aaac5f49f59559a6";
 
@@ -97,6 +86,40 @@ public final class NetworkUtils {
     }
 
     /**
+     * Retrieves the proper URL to query for the METAR weather data.
+**/
+     public static URL getMETARUrl(Context context) {
+        if (WeatherForecastPreferences.isLocationLatLonAvailable(context)) {
+            double[] preferredCoordinates = WeatherForecastPreferences.getLocationCoordinates(context);
+            double latitude = preferredCoordinates[0];
+            double longitude = preferredCoordinates[1];
+            return buildMETARURLLongitudeLatitude(latitude, longitude);
+        }
+         else
+        {
+            return null;
+        }
+
+    }
+
+    /**
+     * Retrieves the proper URL to query for the METAR weather data.
+     **/
+    public static URL getTAFUrl(Context context) {
+        if (WeatherForecastPreferences.isLocationLatLonAvailable(context)) {
+            double[] preferredCoordinates = WeatherForecastPreferences.getLocationCoordinates(context);
+            double latitude = preferredCoordinates[0];
+            double longitude = preferredCoordinates[1];
+            return buildTAFURLLongitudeLatitude(latitude, longitude);
+        }
+        else
+        {
+            return null;
+        }
+
+    }
+
+    /**
      * Builds the URL used to talk to the weather server using latitude and longitude of a
      * location.
      *
@@ -149,6 +172,58 @@ public final class NetworkUtils {
     }
 
     /**
+     * Builds the URL used to talk to the RESTAPI CHECKWX server to retrieve METAR info
+     *
+     * @param latitude  The latitude of the location
+     * @param longitude The longitude of the location
+     * @return The Url to use to query the weather server.
+     */
+    private static URL buildMETARURLLongitudeLatitude(Double latitude, Double longitude) {
+        Uri weatherQueryUri = Uri.parse(METAR_URL).buildUpon()
+                .appendPath(LAT_PARAM)
+                .appendPath(String.valueOf(latitude))
+                .appendPath(LON_PARAM)
+                .appendPath(String.valueOf(longitude))
+                .appendPath("decoded")
+                .build();
+
+        try {
+            URL weatherQueryUrl = new URL(weatherQueryUri.toString());
+            Log.v(TAG, "METAR URL: " + weatherQueryUrl);
+            return weatherQueryUrl;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Builds the URL used to talk to the RESTAPI CHECKWX server to retrieve METAR info
+     *
+     * @param latitude  The latitude of the location
+     * @param longitude The longitude of the location
+     * @return The Url to use to query the weather server.
+     */
+    private static URL buildTAFURLLongitudeLatitude(Double latitude, Double longitude) {
+        Uri weatherQueryUri = Uri.parse(TAF_URL).buildUpon()
+                .appendPath(LAT_PARAM)
+                .appendPath(String.valueOf(latitude))
+                .appendPath(LON_PARAM)
+                .appendPath(String.valueOf(longitude))
+                .appendPath("decoded")
+                .build();
+
+        try {
+            URL weatherQueryUrl = new URL(weatherQueryUri.toString());
+            Log.v(TAG, "TAF URL: " + weatherQueryUrl);
+            return weatherQueryUrl;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
      * This method returns the entire result from the HTTP response.
      *
      * @param url The URL to fetch the HTTP response from.
@@ -174,4 +249,34 @@ public final class NetworkUtils {
             urlConnection.disconnect();
         }
     }
+
+    /**
+     * This method returns the entire result from the HTTP response.
+     *
+     * @param url The URL to fetch the HTTP response from.
+     * @return The contents of the HTTP response, null if no response
+     * @throws IOException Related to network and stream reading
+     */
+    public static String getResponseFromHttpUrlWithHeader(URL url) throws IOException {
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        urlConnection.setRequestProperty("X-API-Key",METAR_TAF_KEY);
+
+        try {
+            InputStream in = urlConnection.getInputStream();
+
+            Scanner scanner = new Scanner(in);
+            scanner.useDelimiter("\\A");
+
+            boolean hasInput = scanner.hasNext();
+            String response = null;
+            if (hasInput) {
+                response = scanner.next();
+            }
+            scanner.close();
+            return response;
+        } finally {
+            urlConnection.disconnect();
+        }
+    }
+
 }

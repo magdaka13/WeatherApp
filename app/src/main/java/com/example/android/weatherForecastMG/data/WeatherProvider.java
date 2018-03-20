@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.example.android.weatherForecastMG.utilities.WeatherForecastDateUtils;
 
@@ -324,6 +325,11 @@ public class WeatherProvider extends ContentProvider {
         return numRowsDeleted;
     }
 
+    @Override
+    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
+        throw new RuntimeException("We are not implementing update in WeatherForecast");
+    }
+
     /**
      * In WeatherForecast, we aren't going to do anything with this method. However, we are required to
      * override it as WeatherProvider extends ContentProvider and getType is an abstract method in
@@ -356,20 +362,9 @@ public class WeatherProvider extends ContentProvider {
                 "We are not implementing insert in WeatherForecast. Use bulkInsert instead");
     }
 
-    @Override
-    public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        throw new RuntimeException("We are not implementing update in WeatherForecast");
-    }
 
-    /**
-     * You do not need to call this method. This is a method specifically to assist the testing
-     * framework in running smoothly. You can read more at:
-     * http://developer.android.com/reference/android/content/ContentProvider.html#shutdown()
-     */
-    @Override
-    @TargetApi(11)
-    public void shutdown() {
-        mOpenHelper.close();
-        super.shutdown();
-    }
+//    public int updateMETARdata(@NonNull Uri uri, @NonNull ContentValues[] values, String selection, String[] selectionArgs) {
+ //       throw new RuntimeException("We are not implementing update in WeatherForecast");
+  //  }
+
 }
